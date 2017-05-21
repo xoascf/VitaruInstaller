@@ -15,6 +15,7 @@ Global
 		{B28A401A-BF27-4584-8B98-0D0EE8C1A916}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B28A401A-BF27-4584-8B98-0D0EE8C1A916}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B28A401A-BF27-4584-8B98-0D0EE8C1A916}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B28A401A-BF27-4584-8B98-0D0EE8C1A916}.Release|Any CPU.Deploy.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

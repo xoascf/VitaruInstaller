@@ -2,6 +2,8 @@
 using System.Net;
 using System.IO;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
 
 namespace VitaruInstall
 {
@@ -96,25 +98,30 @@ namespace VitaruInstall
             string vitaruPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "vitaru");
             string vitaruFile = Path.Combine(vitaruPath, vitaruDllName);
             string focusPath = Path.Combine(lazerPath, osuVer, vitaruDllName);
-            Console.WriteLine("Downloading latest vitaru...");
-            if (!Directory.Exists(vitaruPath))
-                Directory.CreateDirectory(vitaruPath);
-            if (File.Exists(vitaruFile))
-                File.Delete(vitaruFile);
-            string vitaruVersion = "0.2.0";
-            using (WebClient client = new WebClient())
-                client.DownloadFile(dllLink, vitaruFile);
-            Console.WriteLine("Succesfully downloaded vitaru ver {0}!", vitaruVersion);
-            Console.WriteLine("Installing to latest osu!...");
-            Console.WriteLine("Installing to version {0}", osuVer);
-            if (File.Exists(focusPath))
+            if (!(Process.GetProcessesByName("osu!").FirstOrDefault(p => p.MainModule.FileName.StartsWith(lazerPath)) != default(Process)))
             {
-                File.Delete(focusPath);
-                File.Copy(vitaruFile, focusPath);
+                Console.WriteLine("Downloading latest vitaru...");
+                if (!Directory.Exists(vitaruPath))
+                    Directory.CreateDirectory(vitaruPath);
+                if (File.Exists(vitaruFile))
+                    File.Delete(vitaruFile);
+                string vitaruVersion = "0.2.0";
+                using (WebClient client = new WebClient())
+                    client.DownloadFile(dllLink, vitaruFile);
+                Console.WriteLine("Succesfully downloaded vitaru ver {0}!", vitaruVersion);
+                Console.WriteLine("Installing to latest osu!...");
+                Console.WriteLine("Installing to version {0}", osuVer);
+                if (File.Exists(focusPath))
+                {
+                    File.Delete(focusPath);
+                    File.Copy(vitaruFile, focusPath);
+                }
+                else
+                    File.Copy(vitaruFile, focusPath);
+                Console.WriteLine("Succesfully installed Vitaru to osu!lazer version {0}", osuVer);
             }
             else
-                File.Copy(vitaruFile, focusPath);
-            Console.WriteLine("Succesfully installed Vitaru to osu!lazer version {0}", osuVer);
+                Console.WriteLine("It seems osu!lazer is running! Close it to reinstall vitaru!");
             Console.ReadKey();
         }
         static void Uninstall(string lazerPath, string osuVer)
@@ -123,8 +130,13 @@ namespace VitaruInstall
             Console.WriteLine("Will uninstall Vitaru from osu!lazer version {0}", osuVer);
             if (File.Exists(vitaruDllPath))
             {
-                File.Delete(vitaruDllPath);
-                Console.WriteLine("Uninstalled Vitaru, hope you liked it :)");
+                if (!(Process.GetProcessesByName("osu!").FirstOrDefault(p => p.MainModule.FileName.StartsWith(lazerPath)) != default(Process)))
+                {
+                    File.Delete(vitaruDllPath);
+                    Console.WriteLine("Uninstalled Vitaru, hope you liked it :)");
+                }
+                else
+                    Console.WriteLine("It seems osu!lazer is running! Close it to uninstall vitaru");
             }
             else
                 Console.WriteLine("The dll was deleted before I could do something...");
