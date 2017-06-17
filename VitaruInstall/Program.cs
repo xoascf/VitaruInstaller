@@ -10,7 +10,7 @@ namespace VitaruInstall
     class Program
     {
         private const string vitaruDllName = @"osu.Game.Rulesets.Vitaru.dll";
-        private const string dllLink = "https://cdn.discordapp.com/attachments/300703483269611524/315523997016260619/osu.Game.Rulesets.Vitaru.dll";
+        private const string dllLink = "https://github.com/Symcol/osu/releases/download/0.3.1/osu.Game.Rulesets.Vitaru.dll";
         static void Main(string[] args)
         {
             string lazerPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "osulazer");
@@ -65,7 +65,7 @@ namespace VitaruInstall
                         do
                         {
                             what = "";
-                            Console.WriteLine("What do you want me to do?");
+                            Console.WriteLine("What do you want me to do!?");
                             Console.WriteLine("U: Uninstall");
                             Console.WriteLine("R: Reinstall");
                             what = Console.ReadLine();
@@ -121,7 +121,7 @@ namespace VitaruInstall
                 Console.WriteLine("Succesfully installed Vitaru to osu!lazer version {0}", osuVer);
             }
             else
-                Console.WriteLine("It seems osu!lazer is running! Close it to reinstall vitaru!");
+                Console.WriteLine("It seems osu!lazer is running! Close it to install/reinstall vitaru!");
             Console.ReadKey();
         }
         static void Uninstall(string lazerPath, string osuVer)
