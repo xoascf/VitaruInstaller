@@ -10,7 +10,7 @@ namespace VitaruInstall
     class Program
     {
         private const string vitaruDllName = @"osu.Game.Rulesets.Vitaru.dll";
-        private const string dllLink = "https://github.com/Symcol/osu/releases/download/0.3.1/osu.Game.Rulesets.Vitaru.dll";
+        private const string vitaruVersion = "0.3.1";
         static void Main(string[] args)
         {
             string lazerPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "osulazer");
@@ -105,7 +105,7 @@ namespace VitaruInstall
                     Directory.CreateDirectory(vitaruPath);
                 if (File.Exists(vitaruFile))
                     File.Delete(vitaruFile);
-                string vitaruVersion = "0.2.0";
+                string dllLink = "https://github.com/Symcol/osu/releases/download/" + vitaruVersion + "/osu.Game.Rulesets.Vitaru.dll";
                 using (WebClient client = new WebClient())
                     client.DownloadFile(dllLink, vitaruFile);
                 Console.WriteLine("Succesfully downloaded vitaru ver {0}!", vitaruVersion);
