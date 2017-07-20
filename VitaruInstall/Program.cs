@@ -4,6 +4,9 @@ using System.IO;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using SQLite.Net;
+using SQLite.Net.Platform.Win32;
+using SQLite.Net.Attributes;
 
 namespace VitaruInstall
 {
@@ -11,8 +14,10 @@ namespace VitaruInstall
     {
         private const string vitaruDllName = @"osu.Game.Rulesets.Vitaru.dll";
         private const string vitaruVersion = "0.3.1";
+        private const string databaseName = "client.db";
         static void Main(string[] args)
         {
+            string databasePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "osu");
             string lazerPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "osulazer");
             if (Directory.Exists(lazerPath) && Directory.GetDirectories(lazerPath).Length > 0)
             {
@@ -56,7 +61,7 @@ namespace VitaruInstall
                         }
                     }
                 }
-                if (year > 2015 && monthDate > 100 && discrim >= 0)
+                if (year > 2015 && monthDate > 100 && discrim >= 0 && Directory.Exists(databasePath) && File.Exists(Path.Combine(databasePath, databaseName)))
                 {
                     string osuVer = "app-" + year + "." + monthDate + "." + discrim;
                     if (File.Exists(Path.Combine(lazerPath, osuVer, vitaruDllName)))
@@ -118,6 +123,11 @@ namespace VitaruInstall
                 }
                 else
                     File.Copy(vitaruFile, focusPath);
+                Console.WriteLine("Adding to database");
+                SQLiteConnection connection = new SQLiteConnection(new SQLitePlatformWin32($@"{Environment.CurrentDirectory}/{(IntPtr.Size == 8 ? "x64" : "x86")}"), Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "osu", databaseName));
+                connection.BeginTransaction();
+                connection.InsertOrReplace(new RulesetInfo());
+                connection.Close();
                 Console.WriteLine("Succesfully installed Vitaru to osu!lazer version {0}", osuVer);
             }
             else
@@ -142,5 +152,20 @@ namespace VitaruInstall
                 Console.WriteLine("The dll was deleted before I could do something...");
             Console.ReadKey();
         }
+    }
+
+    public class RulesetInfo
+    {
+        [PrimaryKey, AutoIncrement]
+        public int? ID { get; set; }
+
+        [Indexed(Unique = true)]
+        public string Name => "vitaru!";
+
+        [Indexed(Unique = true)]
+        public string InstantiationInfo => "osu.Game.Rulesets.Vitaru.VitaruRuleset, osu.Game.Rulesets.Vitaru, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null";
+
+        [Indexed]
+        public bool Available => true;
     }
 }
