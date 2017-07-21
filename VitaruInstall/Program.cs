@@ -17,7 +17,8 @@ namespace RulesetInstall
         /// </summary>
         public const string RulesetName = "vitaru";
         public const string RulesetDllName = @"osu.Game.Rulesets.Vitaru.dll";
-        public const string RulesetVersion = "0.4.1";
+        public const string RulesetVersion = "0.4.0";
+        public const string GithubName = "Symcol";
         public const string RulesetInstantiationInfo = "osu.Game.Rulesets.Vitaru.VitaruRuleset, osu.Game.Rulesets.Vitaru, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null";
 
         public const string DatabaseName = "client.db";
@@ -118,7 +119,7 @@ namespace RulesetInstall
         static void Install(string lazerPath, string osuVer)
         {
             string vitaruPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), RulesetName);
-            string vitaruFile = Path.Combine(vitaruPath, RulesetDllName);
+            string rulesetFile = Path.Combine(vitaruPath, RulesetDllName);
             string focusPath = Path.Combine(lazerPath, osuVer, RulesetDllName);
 
             if (!(Process.GetProcessesByName("osu!").FirstOrDefault(p => p.MainModule.FileName.StartsWith(lazerPath)) != default(Process)))
@@ -127,12 +128,23 @@ namespace RulesetInstall
 
                 if (!Directory.Exists(vitaruPath))
                     Directory.CreateDirectory(vitaruPath);
-                if (File.Exists(vitaruFile))
-                    File.Delete(vitaruFile);
+                if (File.Exists(rulesetFile))
+                    File.Delete(rulesetFile);
 
-                string dllLink = "https://github.com/Symcol/osu/releases/download/" + RulesetVersion + "/" + RulesetDllName;
+                string dllLink = "https://github.com/" + GithubName + "/osu/releases/download/" + RulesetVersion + "/" + RulesetDllName;
                 using (WebClient client = new WebClient())
-                    client.DownloadFile(dllLink, vitaruFile);
+                {
+                    try
+                    {
+                        client.DownloadFile(dllLink, rulesetFile);
+                    }
+                    catch
+                    {
+                        Console.WriteLine("Failed to downloaded " + RulesetName + " ver {0}!", RulesetVersion);
+                        throw new Exception();
+                    }
+                }
+                    
                 Console.WriteLine("Succesfully downloaded " + RulesetName + " ver {0}!", RulesetVersion);
                 Console.WriteLine("Installing to latest osu!...");
                 Console.WriteLine("Installing to version {0}", osuVer);
@@ -140,10 +152,10 @@ namespace RulesetInstall
                 if (File.Exists(focusPath))
                 {
                     File.Delete(focusPath);
-                    File.Copy(vitaruFile, focusPath);
+                    File.Copy(rulesetFile, focusPath);
                 }
                 else
-                    File.Copy(vitaruFile, focusPath);
+                    File.Copy(rulesetFile, focusPath);
 
                 Console.WriteLine("Adding to database");
                 SQLiteConnection connection = new SQLiteConnection(new SQLitePlatformWin32($@"{Environment.CurrentDirectory}/{(IntPtr.Size == 8 ? "x64" : "x86")}"), Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "osu", DatabaseName));
