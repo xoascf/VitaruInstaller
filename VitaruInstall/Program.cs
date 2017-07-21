@@ -13,7 +13,7 @@ namespace VitaruInstall
     class Program
     {
         private const string vitaruDllName = @"osu.Game.Rulesets.Vitaru.dll";
-        private const string vitaruVersion = "0.3.1";
+        private const string vitaruVersion = "0.4.1";
         private const string databaseName = "client.db";
         static void Main(string[] args)
         {
