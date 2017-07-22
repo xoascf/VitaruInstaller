@@ -15,11 +15,11 @@ namespace RulesetInstall
         /// <summary>
         /// In order to change this to do your gamemode, follow our structure and add a release on github. Then, change RulesetName, RulesetDllName, RulesetVersion and RulesetInstantiationInfo to match your gamemode's information.
         /// </summary>
-        public const string RulesetName = "vitaru";
-        public const string RulesetDllName = @"osu.Game.Rulesets.Vitaru.dll";
-        public const string RulesetVersion = "0.4.0";
+        public const string RulesetName = "shape";
+        public const string RulesetDllName = @"osu.Game.Rulesets.Shape.dll";
+        public const string RulesetVersion = "0.0.1";
         public const string GithubName = "Symcol";
-        public const string RulesetInstantiationInfo = "osu.Game.Rulesets.Vitaru.VitaruRuleset, osu.Game.Rulesets.Vitaru, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null";
+        public const string RulesetInstantiationInfo = "osu.Game.Rulesets.Shape.ShapeRuleset, osu.Game.Rulesets.Shape, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null";
 
         public const string DatabaseName = "client.db";
 
@@ -118,16 +118,16 @@ namespace RulesetInstall
 
         static void Install(string lazerPath, string osuVer)
         {
-            string vitaruPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), RulesetName);
-            string rulesetFile = Path.Combine(vitaruPath, RulesetDllName);
+            string rulesetPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), RulesetName);
+            string rulesetFile = Path.Combine(rulesetPath, RulesetDllName);
             string focusPath = Path.Combine(lazerPath, osuVer, RulesetDllName);
 
             if (!(Process.GetProcessesByName("osu!").FirstOrDefault(p => p.MainModule.FileName.StartsWith(lazerPath)) != default(Process)))
             {
                 Console.WriteLine("Downloading latest " + RulesetName + "...");
 
-                if (!Directory.Exists(vitaruPath))
-                    Directory.CreateDirectory(vitaruPath);
+                if (!Directory.Exists(rulesetPath))
+                    Directory.CreateDirectory(rulesetPath);
                 if (File.Exists(rulesetFile))
                     File.Delete(rulesetFile);
 
