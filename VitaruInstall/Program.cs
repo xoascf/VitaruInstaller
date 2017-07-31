@@ -17,7 +17,7 @@ namespace RulesetInstall
         /// </summary>
         public const string RulesetName = "vitaru";
         public const string RulesetDllName = @"osu.Game.Rulesets.Vitaru.dll";
-        public const string RulesetVersion = "0.4.0";
+        public const string RulesetVersion = "0.4.1";
         public const string GithubName = "Symcol";
         public const string RulesetInstantiationInfo = "osu.Game.Rulesets.Vitaru.VitaruRuleset, osu.Game.Rulesets.Vitaru, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null";
 
@@ -140,8 +140,9 @@ namespace RulesetInstall
                     }
                     catch
                     {
-                        Console.WriteLine("Failed to downloaded " + RulesetName + " ver {0}!", RulesetVersion);
-                        throw new Exception();
+                        Console.WriteLine("Failed to downloaded " + RulesetName + " version {0}!", RulesetVersion);
+                        Console.WriteLine("Please close this window and notify the ruleset creator!");
+                        Console.ReadLine();
                     }
                 }
                     
