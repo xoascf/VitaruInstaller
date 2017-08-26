@@ -17,7 +17,7 @@ namespace RulesetInstall
         /// </summary>
         public const string RulesetName = "vitaru";
         public const string RulesetDllName = @"osu.Game.Rulesets.Vitaru.dll";
-        public const string RulesetVersion = "0.5.0";
+        public const string RulesetVersion = "0.5.1";
         public const string GithubName = "Symcol";
         public const string RulesetInstantiationInfo = "osu.Game.Rulesets.Vitaru.VitaruRuleset, osu.Game.Rulesets.Vitaru, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null";
 
@@ -89,8 +89,8 @@ namespace RulesetInstall
                             Console.WriteLine("U: Uninstall");
                             Console.WriteLine("R: Reinstall");
                             what = Console.ReadLine();
-                        } while (!(what == "U" || what == "R"));
-                        if (what == "U")
+                        } while (!(what == "U" || what == "R" || what == "u" || what == "r"));
+                        if (what == "U" || what == "u")
                             Uninstall(lazerPath, osuVer);
                         else
                             Install(lazerPath, osuVer);
